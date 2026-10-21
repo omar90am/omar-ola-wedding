@@ -51,7 +51,7 @@
   const empty=t=>`<p class="empty">${t}</p>`;
 
   function renderStats(){let total=0,groom=0,bride=0,no=0,sp=0,inSeats=0;guests.forEach(g=>{if(attending(g)){const n=seats(g);total+=n;if(side(g.side)==='العريس')groom+=n;if(side(g.side)==='العروس')bride+=n;if(isIn(g))inSeats+=n;}else no++;if(String(g.specialRequest||'').trim())sp++;});$('s-in').textContent=`${inSeats}/${total}`;$('s-seats').textContent=total;$('s-resp').textContent=guests.length;$('s-no').textContent=no;$('s-groom').textContent=groom;$('s-bride').textContent=bride;$('s-sp').textContent=sp;}
-  function renderGuests(){const q=$('q').value,st=$('f-status').value,sd=$('f-side').value;const list=guests.filter(g=>match(g,q)&&(sd==='all'||side(g.side)===sd)&&(st==='all'||(st==='yes'&&attending(g))||(st==='no'&&!attending(g))||(st==='in'&&isIn(g))||(st==='out'&&attending(g)&&!isIn(g))||(st==='sp'&&String(g.specialRequest||'').trim())));$('g-list').innerHTML=list.map(g=>card(g)).join('')||empty('لا توجد نتائج مطابقة.');}
+  function renderGuests(){const q=$('q').value,st=$('f-status').value,sd=$('f-side').value;const list=guests.filter(g=>match(g,q)&&(sd==='all'||side(g.side)===sd)&&(st==='all'||(st==='yes'&&attending(g))||(st==='no'&&!attending(g))||(st==='in'&&isIn(g))||(st==='out'&&attending(g)&&!isIn(g))||(st==='sp'&&String(g.specialRequest||'').trim())));$('g-list').innerHTML=list.map(g=>card(g,`<button class="btn ghost" data-delete="${esc(g.id)}" style="margin-top:.65rem;width:100%;border-color:#8A3C34;color:#8A3C34">حذف الرد</button>`)).join('')||empty('لا توجد نتائج مطابقة.');}
   function renderTables(){const list=guests.filter(g=>attending(g)&&match(g,$('tq').value));$('t-list').innerHTML=list.map(g=>card(g,`<div class="row"><input type="text" id="tb-${esc(g.id)}" value="${esc(g.tableNumber||'')}" placeholder="رقم الطاولة مثل A12" aria-label="طاولة ${esc(g.name||'')}"><button class="btn secondary" data-save="${esc(g.id)}">حفظ</button></div>`)).join('')||empty('لا توجد ردود حضور.');}
   function renderNotes(){const list=guests.filter(g=>String(g.specialRequest||'').trim()||(g.wishes&&!['None','لا يوجد'].includes(String(g.wishes).trim())));$('n-list').innerHTML=list.map(g=>card(g)).join('')||empty('لا توجد رسائل أو طلبات أو ملاحظات.');}
   function renderCheckin(){const q=$('ci-q').value;const list=q.trim()?guests.filter(g=>attending(g)&&match(g,q)).slice(0,12):[];$('ci-list').innerHTML=list.map(g=>card(g,isIn(g)?`<button class="btn ghost" data-undo="${esc(g.id)}" style="margin-top:.65rem;width:100%">إلغاء الدخول — إذا كان تسجيلًا خاطئًا</button>`:`<button class="btn go" data-in="${esc(g.id)}">تسجيل دخول · ${seats(g)} أشخاص</button>`)).join('')||(q.trim()?empty('لا يوجد ضيف مطابق.'):'');const recent=guests.filter(isIn).sort((a,b)=>(b.checkedInAt?.toMillis?.()||0)-(a.checkedInAt?.toMillis?.()||0)).slice(0,8);$('ci-recent').innerHTML=recent.map(g=>card(g)).join('')||empty('لم يدخل أي ضيف بعد.');}
@@ -85,11 +85,28 @@
 
   function exportCsv(){const clean=v=>`"${String(v??'').replace(/"/g,'""').replace(/\n/g,' ')}"`;let text='\uFEFFالاسم,رقم الهاتف,الجهة,الحالة,عدد الحاضرين,رسالة لعمر وعلا,الطلب أو الملاحظة,الطاولة,تسجيل الدخول,رمز البطاقة\n';guests.forEach(g=>{text+=[g.name,phone(g),side(g.side),attending(g)?'يحضر':'يعتذر',seats(g),g.wishes||'',g.specialRequest||'',g.tableNumber||'',isIn(g)?'تم':'',g.inviteId||''].map(clean).join(',')+'\n';});const url=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8;'})),a=document.createElement('a');a.href=url;a.download='Omar_Ola_GuestList.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 
+  async function deleteGuest(id,button){
+    const g=guests.find(x=>x.id===id);
+    const name=g?.name||'هذا الضيف';
+    const ok=confirm(`هل أنت متأكد من حذف رد «${name}»؟\n\nسيتم حذف بيانات الرد نهائيًا من Firestore ولا يمكن التراجع عن هذه العملية.`);
+    if(!ok)return;
+    const old=button?.textContent||'حذف الرد';
+    if(button){button.disabled=true;button.textContent='جاري الحذف…';}
+    try{
+      await getDb().collection('guests').doc(id).delete();
+    }catch(err){
+      console.error(err);
+      alert('تعذر حذف الرد. تحقق من الاتصال وصلاحيات حساب الإدارة ثم حاول مرة أخرى.');
+      if(button){button.disabled=false;button.textContent=old;}
+    }
+  }
+
 
   function init(){
     $('login-form').addEventListener('submit',login);$('lock-btn').addEventListener('click',lock);$('csv').addEventListener('click',exportCsv);$('scan-btn').addEventListener('click',toggleScan);
     ['q','tq','ci-q'].forEach(id=>$(id).addEventListener('input',debounce(renderAll)));['f-status','f-side'].forEach(id=>$(id).addEventListener('change',renderGuests));
     document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>{const on=x===b;x.classList.toggle('active',on);x.setAttribute('aria-selected',String(on));});document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='p-'+b.dataset.t));if(b.dataset.t!=='checkin')stopScan();scrollTo({top:0,behavior:'smooth'});}));
+    $('g-list').addEventListener('click',async e=>{const b=e.target.closest('[data-delete]');if(!b)return;await deleteGuest(b.dataset.delete,b);});
     $('ci-list').addEventListener('click',async e=>{const inBtn=e.target.closest('[data-in]'),undo=e.target.closest('[data-undo]');if(inBtn){inBtn.disabled=true;await checkIn(inBtn.dataset.in);}if(undo&&confirm('إلغاء تسجيل الدخول لهذا الضيف؟')){try{await getDb().collection('guests').doc(undo.dataset.undo).set({checkedIn:false,checkedInAt:null},{merge:true});$('result').className='result';}catch(err){console.error(err);showResult('bad','تعذر إلغاء تسجيل الدخول.');}}});
     $('ci-q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const q=$('ci-q').value;if(/RSVP-/i.test(q))byCode(q);}});
     $('t-list').addEventListener('click',async e=>{const b=e.target.closest('[data-save]');if(!b)return;const id=b.dataset.save;b.disabled=true;const old=b.textContent;try{await getDb().collection('guests').doc(id).set({tableNumber:$('tb-'+id).value.trim(),adminUpdatedAt:serverTimestamp()},{merge:true});b.textContent='تم الحفظ';}catch(err){console.error(err);b.textContent='فشل الحفظ';}setTimeout(()=>{b.textContent=old;b.disabled=false;},1200);});
