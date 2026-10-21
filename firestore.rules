@@ -1,0 +1,100 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function phoneLikeId(id) {
+      return id.matches('^\\+?[0-9]{7,17}$');
+    }
+
+    function canonicalGuestId(id) {
+      return id.matches('^[0-9]{7,15}$');
+    }
+
+    function validSide(value) {
+      return value == 'العريس' || value == 'العروس';
+    }
+
+    function validStatus(value) {
+      return value == 'يحضر' || value == 'يعتذر' || value == 'yes' || value == 'no';
+    }
+
+    // RSVP remains open through 22 Dec 2026 in Iraq (UTC+3).
+    // 2026-12-23 00:00:00 Asia/Baghdad = 2026-12-22 21:00:00 UTC.
+    function rsvpOpen() {
+      return request.time < timestamp.value(1797973200000);
+    }
+
+    function validGuestShape(id) {
+      return canonicalGuestId(id)
+        && request.resource.data.phoneCanonical == id
+        && request.resource.data.phoneE164 == '+' + id
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 120
+        && validSide(request.resource.data.side)
+        && validStatus(request.resource.data.status)
+        && request.resource.data.guestsCount in ['0','1','2','3','4','5','6']
+        && request.resource.data.inviteId is string
+        && request.resource.data.inviteId.matches('^RSVP-[A-Z0-9-]{8,40}$');
+    }
+
+    function guestCreateAllowed(id) {
+      return validGuestShape(id)
+        && request.resource.data.keys().hasOnly([
+          'name','phone','phoneE164','phoneCanonical','phoneCountry','phoneDialCode',
+          'side','status','guestsCount','wishes','specialRequestType','specialRequest',
+          'inviteId','updatedAt','timestamp'
+        ]);
+    }
+
+    function guestUpdateAllowed(id) {
+      return canonicalGuestId(id)
+        && request.resource.data.phoneCanonical == id
+        && resource.data.phoneCanonical == id
+        && request.resource.data.phoneCanonical == resource.data.phoneCanonical
+        && request.resource.data.phoneE164 == resource.data.phoneE164
+        && request.resource.data.side == resource.data.side
+        && request.resource.data.inviteId == resource.data.inviteId
+        && request.resource.data.timestamp == resource.data.timestamp
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'name','status','guestsCount','wishes','specialRequestType','specialRequest','updatedAt'
+        ])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 120
+        && validStatus(request.resource.data.status)
+        && request.resource.data.guestsCount in ['0','1','2','3','4','5','6'];
+    }
+
+    match /admins/{uid} {
+      // The Firebase Console/Admin SDK can create this document even though clients cannot.
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
+    match /guests/{guestId} {
+      // Public guests cannot enumerate the guest list. Exact-document lookup remains
+      // available so the existing "find my RSVP by phone" flow keeps working.
+      allow get: if isAdmin() || phoneLikeId(guestId);
+      allow list: if isAdmin();
+
+      // Guests may only create/update RSVP fields. Admin-only fields such as tableNumber,
+      // checkedIn and checkedInAt cannot be changed from the public invitation.
+      allow create: if isAdmin() || (rsvpOpen() && guestCreateAllowed(guestId));
+      allow update: if isAdmin() || (rsvpOpen() && guestUpdateAllowed(guestId));
+      allow delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name":"دعوة زفاف عمر وعلا",
+  "short_name":"عمر وعلا",
+  "description":"دعوة زفاف عمر وعلا — 26 ديسمبر 2026 — قاعة أوريف، عنكاوا، أربيل.",
+  "lang":"ar","dir":"rtl","id":"./","start_url":"./","scope":"./","display":"standalone",
+  "background_color":"#F7F3EB","theme_color":"#F6F2E9",
+  "icons":[{"src":"img/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"img/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"}]
+}

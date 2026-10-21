@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#F7F3EB">
+  <title>لوحة الإدارة | عمر وعلا</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icon-192.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css?v=1.0.0">
+</head>
+<body>
+  <section id="login" class="login-screen" aria-labelledby="login-title">
+    <form id="login-form" class="login-card" autocomplete="on">
+      <img src="img/monogram.webp" width="78" height="78" alt="شعار عمر وعلا">
+      <h1 id="login-title">لوحة الإدارة</h1>
+      <p>الدخول محمي بواسطة Firebase Authentication.</p>
+      <label class="sr-only" for="email">البريد الإلكتروني</label>
+      <input id="email" type="email" inputmode="email" autocomplete="username" placeholder="البريد الإلكتروني" required>
+      <label class="sr-only" for="pw">كلمة المرور</label>
+      <input id="pw" type="password" autocomplete="current-password" placeholder="كلمة المرور" required>
+      <p id="login-err" class="error" role="alert" aria-live="polite"></p>
+      <button class="btn primary" type="submit">تسجيل الدخول</button>
+      <p class="security-note">لن تُفتح بيانات الضيوف إلا لحساب Firebase الموجود في مجموعة admins.</p>
+    </form>
+  </section>
+  <main id="app" hidden>
+    <header class="topbar"><div><h1>زفاف عمر وعلا</h1><p><span id="admin-user">حساب الإدارة</span></p></div><div class="top-actions"><span id="conn" class="connection">جاري الاتصال</span><button id="csv" class="btn secondary small" type="button">تصدير CSV</button><button id="lock-btn" class="btn ghost small" type="button">تسجيل خروج</button></div></header>
+    <section class="stats" aria-label="الإحصائيات"><div class="stat featured"><strong id="s-in">0/0</strong><span>دخلوا / إجمالي المقاعد</span></div><div class="stat"><strong id="s-seats">0</strong><span>المقاعد المؤكدة</span></div><div class="stat"><strong id="s-resp">0</strong><span>إجمالي الردود</span></div><div class="stat"><strong id="s-no">0</strong><span>الاعتذارات</span></div><div class="stat"><strong id="s-groom">0</strong><span>جهة عمر</span></div><div class="stat"><strong id="s-bride">0</strong><span>جهة علا</span></div><div class="stat"><strong id="s-sp">0</strong><span>طلبات خاصة</span></div><div class="stat action"><button class="btn secondary" type="button" onclick="document.getElementById('csv').click()">تنزيل القائمة</button></div></section>
+    <section id="p-guests" class="panel active" aria-label="الردود"><div class="filters"><input id="q" type="search" placeholder="بحث بالاسم أو الهاتف أو RSVP ID" aria-label="بحث الضيوف"><select id="f-status" aria-label="فلتر الحالة"><option value="all">كل الحالات</option><option value="yes">يحضر</option><option value="no">يعتذر</option><option value="in">تم الدخول</option><option value="out">لم يدخل بعد</option><option value="sp">طلب خاص</option></select><select id="f-side" aria-label="فلتر الجهة"><option value="all">كل الجهات</option><option value="العريس">جهة عمر</option><option value="العروس">جهة علا</option></select></div><div id="g-list" class="card-list" aria-live="polite"></div></section>
+    <section id="p-tables" class="panel" aria-label="الطاولات"><div class="filters"><input id="tq" type="search" placeholder="بحث بالاسم أو الهاتف أو RSVP ID" aria-label="بحث الطاولات"></div><details class="scanner-card hall-reference"><summary>عرض مخطط القاعة المرجعي</summary><p>مرجع بصري تقريبي فقط؛ تعيين الطاولة الفعلي يتم من بطاقات الضيوف أدناه.</p><img src="img/hall-layout-reference.png" width="700" height="1215" alt="مخطط مرجعي لتوزيع القاعة والطاولات" loading="lazy"></details><div id="t-list" class="card-list"></div></section>
+    <section id="p-notes" class="panel" aria-label="الملاحظات والرسائل"><h2 class="subhead">الرسائل والطلبات</h2><div id="n-list" class="card-list"></div></section>
+    <section id="p-checkin" class="panel" aria-label="تسجيل الدخول"><div class="scanner-card"><div class="scanner-head"><div><h2>Check-in</h2><p>ابحث بالاسم/الهاتف/RSVP ID، أو افتح الكاميرا لمسح QR.</p></div><button id="scan-btn" class="btn secondary" type="button">فتح الكاميرا</button></div><input id="ci-q" type="search" placeholder="الاسم أو الهاتف أو RSVP-..." aria-label="بحث تسجيل الدخول"><video id="video" playsinline muted></video><div id="result" class="result" role="status" aria-live="polite"></div></div><div id="ci-list" class="card-list"></div><h2 class="subhead">آخر عمليات الدخول</h2><div id="ci-recent" class="card-list"></div></section>
+    <nav class="tabs" aria-label="أقسام لوحة الإدارة"><button class="tab active" type="button" data-t="guests" aria-selected="true">الردود</button><button class="tab" type="button" data-t="tables" aria-selected="false">الطاولات</button><button class="tab" type="button" data-t="notes" aria-selected="false">الرسائل</button><button class="tab" type="button" data-t="checkin" aria-selected="false">الدخول</button></nav>
+  </main>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="js/admin.js?v=1.0.0"></script>
+</body>
+</html>
