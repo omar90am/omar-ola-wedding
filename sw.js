@@ -1,8 +1,8 @@
-/* Omar & Ola wedding invitation — first public release v1.0.0. */
-const BUILD='v1.0.0';
+/* Omar & Ola wedding invitation — v1.0.0 responsive/audio polish hotfix. */
+const BUILD='v1.0.0-polish1';
 const CACHE=`omar-ola-${BUILD}`;
 const SHELL=[
-  './','./index.html','./js/qrcode-local.js?v=1.0.0','./js/app.js?v=1.0.0','./manifest.webmanifest',
+  './','./index.html','./index-base.html','./js/qrcode-local.js?v=1.0.0','./js/app.js?v=1.0.0','./js/polish.js?v=1.0.1','./manifest.webmanifest',
   './img/monogram.webp','./img/name-omar.webp','./img/name-ola.webp','./img/name-wa.webp',
   './img/floral-top.webp','./img/floral-bottom.webp',
   './img/icon-192.png','./img/icon-512.png','./img/apple-touch-icon.png'
