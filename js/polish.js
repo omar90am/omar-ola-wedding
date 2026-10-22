@@ -117,29 +117,43 @@
     let pausedByBackground = false;
     let resumeInFlight = false;
 
+    /* Capture the user's intent before app.js starts its fade/play/pause action. */
+    button.addEventListener('click', () => {
+      if (resumeInFlight || document.hidden) return;
+      userWantedMusic = audio.paused;
+      if (!userWantedMusic) pausedByBackground = false;
+    }, {capture:true});
+
     audio.addEventListener('play', () => {
       userWantedMusic = true;
       pausedByBackground = false;
     });
 
     audio.addEventListener('pause', () => {
-      if (document.hidden || document.visibilityState === 'hidden') {
+      if (pausedByBackground || document.hidden || document.visibilityState === 'hidden') {
         if (userWantedMusic && !audio.ended) pausedByBackground = true;
         return;
       }
       if (!resumeInFlight) userWantedMusic = false;
     });
 
+    /* pagehide can arrive before visibility becomes hidden on some Safari/WebView builds. */
+    window.addEventListener('pagehide', () => {
+      if (userWantedMusic && !audio.paused && !audio.ended) pausedByBackground = true;
+    }, {capture:true,passive:true});
+
     const resumeIfNeeded = () => {
       if (document.hidden || document.visibilityState === 'hidden') return;
       if (!document.body.classList.contains('invitation-open')) return;
       if (!pausedByBackground || !userWantedMusic || !audio.paused || audio.ended) return;
 
-      pausedByBackground = false;
       resumeInFlight = true;
       /* Use the invitation's own button handler so its private state, UI and fade stay in sync. */
       button.click();
-      queueMicrotask(() => { resumeInFlight = false; });
+      setTimeout(() => {
+        resumeInFlight = false;
+        if (audio.paused && userWantedMusic && !audio.ended) pausedByBackground = true;
+      }, 700);
     };
 
     document.addEventListener('visibilitychange', () => {
