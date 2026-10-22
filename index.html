@@ -21,7 +21,7 @@
         if(!response.ok)throw new Error(`HTTP ${response.status}`);
         let html=await response.text();
         if(!html.includes('js/polish.js')){
-          html=html.replace('</head>','  <script defer src="js/polish.js?v=1.0.1"></scr'+'ipt>\n</head>');
+          html=html.replace('</head>','  <script defer src="js/polish.js?v=1.0.2"></scr'+'ipt>\n</head>');
         }
         document.open();
         document.write(html);
