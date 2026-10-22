@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const STYLE_ID = 'wedding-polish-v101';
+  const STYLE_ID = 'wedding-polish-v102';
   const AUDIO_ID = 'core-audio';
   const AUDIO_BUTTON_ID = 'audio-btn';
 
@@ -10,44 +10,38 @@
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      /* Unified finishing pass for every stationery card. */
-      .bottom-ornament-bridge{
-        position:absolute;
-        z-index:3;
-        left:var(--bridge-inset,24%);
-        right:var(--bridge-inset,24%);
-        bottom:calc(var(--frame-1,9px) + var(--bridge-lift,1px));
-        height:10px;
-        pointer-events:none;
-        user-select:none;
+      /*
+       * Bottom ornaments are part of the stationery frame, not floating artwork.
+       * The source WEBP contains transparent space below its ornamental baseline,
+       * so we intentionally dock the image box below --frame-1 until the visible
+       * gold baseline meets the innermost frame line.
+       */
+      .bottom-ornament-bridge{display:none!important}
+
+      .cover-card{
+        container-type:inline-size;
+        --ornament-dock:clamp(8px,2.9cqw,18px);
       }
-      .bottom-ornament-bridge::before{
-        content:"";
-        position:absolute;
-        left:0;right:0;top:50%;
-        height:1px;
-        transform:translateY(-50%);
-        background:linear-gradient(90deg,
-          rgba(200,148,69,0) 0%,
-          rgba(200,148,69,.62) 10%,
-          rgba(200,148,69,.76) 35%,
-          rgba(200,148,69,.76) 65%,
-          rgba(200,148,69,.62) 90%,
-          rgba(200,148,69,0) 100%);
+      .cover-card .floral-bl,
+      .cover-card .floral-br{
+        bottom:calc(var(--frame-1) - var(--ornament-dock))!important;
       }
-      .bottom-ornament-bridge::after{
-        content:"";
-        position:absolute;
-        left:50%;top:50%;
-        width:5px;height:5px;
-        border:1px solid rgba(200,148,69,.82);
-        background:var(--paper,#F7F3EB);
-        transform:translate(-50%,-50%) rotate(45deg);
+
+      .ui-layer{
+        --ornament-dock:clamp(7px,1.4vw,18px);
       }
-      .cover-card{--bridge-inset:29%;--bridge-lift:1px;container-type:inline-size}
-      .ui-layer{--bridge-inset:17.5%;--bridge-lift:1px}
-      .attendance-pass{--bridge-inset:22.5%;--bridge-lift:1px}
-      .attendance-pass .bottom-ornament-bridge::after{background:var(--paper-soft,#FCF9F2)}
+      .ui-layer>.floral-bl,
+      .ui-layer>.floral-br{
+        bottom:calc(var(--frame-1) - var(--ornament-dock))!important;
+      }
+
+      .attendance-pass{
+        --ornament-dock:clamp(6px,1.4vw,10px);
+      }
+      .attendance-pass .floral-bl,
+      .attendance-pass .floral-br{
+        bottom:calc(var(--frame-1) - var(--ornament-dock))!important;
+      }
 
       /*
        * Cover-card typography and controls scale from the card itself (cqw),
@@ -58,7 +52,7 @@
         .cover-card{
           --frame-1:1.45cqw;
           --frame-2:2.7cqw;
-          --bridge-lift:.2cqw;
+          --ornament-dock:2.9cqw;
         }
         .cover-card .cover-content{
           inset:8.8% 18% 7.8%;
@@ -84,8 +78,6 @@
                      inset 0 -.5cqw 1.15cqw rgba(72,48,20,.26);
         }
         .cover-card .open-hint{font-size:2.02cqw;line-height:1.25}
-        .cover-card .bottom-ornament-bridge{height:1.6cqw}
-        .cover-card .bottom-ornament-bridge::after{width:.85cqw;height:.85cqw}
       }
 
       /* Very short screens: keep the complete card visible as a single artboard. */
@@ -97,14 +89,45 @@
     document.head.appendChild(style);
   }
 
-  function installBottomBridges() {
-    document.querySelectorAll('.cover-card, .ui-layer, .attendance-pass').forEach(card => {
-      if (card.querySelector(':scope > .bottom-ornament-bridge')) return;
-      const bridge = document.createElement('span');
-      bridge.className = 'bottom-ornament-bridge';
-      bridge.setAttribute('aria-hidden', 'true');
-      card.appendChild(bridge);
+  function removeLegacyBottomBridges() {
+    document.querySelectorAll('.bottom-ornament-bridge').forEach(node => node.remove());
+  }
+
+  /*
+   * The downloadable attendance pass is rendered by app.js on a 1080×1600 canvas,
+   * independent of DOM/CSS. Shift only floral-bottom.webp on that export canvas so
+   * the saved PNG uses the same docked geometry as the live card.
+   */
+  function installPassExportOrnamentDock() {
+    if (typeof CanvasRenderingContext2D === 'undefined') return;
+    const proto = CanvasRenderingContext2D.prototype;
+    if (proto.__omarOlaBottomDockV102) return;
+
+    const nativeDrawImage = proto.drawImage;
+    Object.defineProperty(proto, '__omarOlaBottomDockV102', {
+      value: true,
+      configurable: false,
+      enumerable: false,
+      writable: false
     });
+
+    proto.drawImage = function(image, ...args) {
+      const src = String(image?.currentSrc || image?.src || '');
+      const isAttendanceExport = this.canvas?.width === 1080 && this.canvas?.height === 1600;
+      const isBottomFloral = /(?:^|\/)floral-bottom\.webp(?:[?#].*)?$/i.test(src);
+
+      if (isAttendanceExport && isBottomFloral) {
+        this.save();
+        this.translate(0, 6);
+        try {
+          return nativeDrawImage.call(this, image, ...args);
+        } finally {
+          this.restore();
+        }
+      }
+
+      return nativeDrawImage.call(this, image, ...args);
+    };
   }
 
   function installAudioResume() {
@@ -166,6 +189,7 @@
   }
 
   installPolishStyles();
-  installBottomBridges();
+  removeLegacyBottomBridges();
+  installPassExportOrnamentDock();
   installAudioResume();
 })();
