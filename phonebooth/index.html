@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./phonebooth.css?v=5">
+  <link rel="stylesheet" href="./phonebooth.css?v=6">
 </head>
 <body>
   <main class="page">
@@ -37,19 +37,13 @@
           <div class="fine-rule" aria-hidden="true"><i></i></div>
           <p class="eyebrow">٢٦ · ١٢ · ٢٠٢٦</p>
         </header>
-
         <h1 id="title">صندوق الذكريات</h1>
-
-        <label class="name-field">اسمك <span>(اختياري)</span>
-          <input id="guestName" maxlength="80" autocomplete="name" placeholder="مِن مَن هذه الذكرى؟">
-        </label>
-
+        <label class="name-field">اسمك <span>(اختياري)</span><input id="guestName" maxlength="80" autocomplete="name" placeholder="مِن مَن هذه الذكرى؟"></label>
         <div class="choices" id="choices">
           <button class="choice" data-panel="voicePanel"><b>🎙️</b><span>سجّل رسالة صوتية<small>احكِ لنا قصة، أمنية، أو كلمة من القلب</small></span></button>
           <button class="choice" data-panel="textPanel"><b>💌</b><span>اكتب لنا رسالة<small>رسالة نعود إليها في السنوات القادمة</small></span></button>
           <button class="choice" data-panel="photoPanel"><b>📸</b><span>شاركنا صورة<small>التقط صورة الآن أو اختر واحدة من هاتفك</small></span></button>
         </div>
-
         <section class="panel" id="voicePanel" hidden><button class="back" type="button">العودة ←</button><h2>اترك لنا صوتك</h2><p class="prompt">ما الذي تريد أن نتذكّره عن هذه الليلة؟ أو شاركنا نصيحة جميلة للحياة الزوجية.</p><div class="recorder"><div id="timer">00:00</div><button id="recordBtn" class="primary" type="button">ابدأ التسجيل</button><button id="stopBtn" type="button" hidden>إيقاف التسجيل</button><audio id="previewAudio" controls hidden></audio><button id="sendVoice" class="primary" type="button" hidden>إرسال الرسالة الصوتية</button><button id="redoVoice" type="button" hidden>تسجيل مرة أخرى</button></div></section>
         <section class="panel" id="textPanel" hidden><button class="back" type="button">العودة ←</button><h2>اكتب لنا رسالة</h2><p class="prompt">ذكرى، أمنية، نصيحة، أو كلمة تجعلنا نبتسم عندما نقرأها بعد سنوات.</p><textarea id="messageText" maxlength="2000" rows="7" placeholder="إلى عمر وعلا…"></textarea><button id="sendText" class="primary" type="button">إرسال الرسالة</button></section>
         <section class="panel" id="photoPanel" hidden><button class="back" type="button">العودة ←</button><h2>شاركنا صورة</h2><p class="prompt">التقط صورة الآن أو اختر واحدة من هاتفك</p><label class="upload">اختيار صورة أو التقاط صورة<input id="photoInput" type="file" accept="image/*"></label><img id="photoPreview" alt="معاينة الصورة المختارة" hidden><textarea id="photoCaption" maxlength="300" rows="3" placeholder="اكتب تعليقًا على الصورة (اختياري)"></textarea><button id="sendPhoto" class="primary" type="button" disabled>إرسال الصورة</button></section>
