@@ -20,6 +20,7 @@
         const response=await fetch('./index-base.html',{cache:'no-cache'});
         if(!response.ok)throw new Error(`HTTP ${response.status}`);
         let html=await response.text();
+        html=html.replace(/نرجو التكرم بإرسال الرد قبل\s*<strong>22 ديسمبر 2026<\/strong>\./g,'نرجو التكرم بإرسال الرد قبل <strong>24 ديسمبر 2026</strong>.');
         if(!html.includes('js/polish.js')){
           html=html.replace('</head>','  <script defer src="js/polish.js?v=1.0.2"></scr'+'ipt>\n</head>');
         }
