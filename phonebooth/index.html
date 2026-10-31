@@ -47,12 +47,12 @@
         <section class="panel" id="voicePanel" hidden><button class="back" type="button">العودة ←</button><h2>اترك لنا صوتك</h2><p class="prompt">ما الذي تريد أن نتذكّره عن هذه الليلة؟ أو شاركنا نصيحة جميلة للحياة الزوجية.</p><div class="recorder"><div id="timer">00:00</div><button id="recordBtn" class="primary" type="button">ابدأ التسجيل</button><button id="stopBtn" type="button" hidden>إيقاف التسجيل</button><audio id="previewAudio" controls hidden></audio><button id="sendVoice" class="primary" type="button" hidden>إرسال الرسالة الصوتية</button><button id="redoVoice" type="button" hidden>تسجيل مرة أخرى</button></div></section>
         <section class="panel" id="textPanel" hidden><button class="back" type="button">العودة ←</button><h2>اكتب لنا رسالة</h2><p class="prompt">ذكرى، أمنية، نصيحة، أو كلمة تجعلنا نبتسم عندما نقرأها بعد سنوات.</p><textarea id="messageText" maxlength="2000" rows="7" placeholder="إلى عمر وعلا…"></textarea><button id="sendText" class="primary" type="button">إرسال الرسالة</button></section>
         <section class="panel" id="photoPanel" hidden><button class="back" type="button">العودة ←</button><h2>شاركنا صورة</h2><p class="prompt">التقط صورة الآن أو اختر واحدة من هاتفك</p><label class="upload">اختيار صورة أو التقاط صورة<input id="photoInput" type="file" accept="image/*"></label><img id="photoPreview" alt="معاينة الصورة المختارة" hidden><textarea id="photoCaption" maxlength="300" rows="3" placeholder="اكتب تعليقًا على الصورة (اختياري)"></textarea><button id="sendPhoto" class="primary" type="button" disabled>إرسال الصورة</button></section>
-        <section class="panel success" id="successPanel" hidden><div class="heart">♥</div><h2>شكرًا لكم</h2><p>تم حفظ ذكراكم لعمر وعلا بكل حب.</p><button id="anotherBtn" class="primary" type="button">اترك ذكرى أخرى</button></section>
+        <section class="panel success" id="successPanel" hidden><div class="heart">♥</div><h2>شكرًا لكم</h2><p>تم حفظ ذكراكم بكل حب.</p><button id="anotherBtn" class="primary" type="button">اترك ذكرى أخرى</button></section>
         <p id="status" class="status" role="status" aria-live="polite"></p>
         <footer><div class="footer-rule" aria-hidden="true"><i></i></div><span>عمر وعلا · ٢٦ ديسمبر ٢٠٢٦</span></footer>
       </div>
     </section>
   </main>
-  <script type="module" src="./phonebooth.js?v=5"></script>
+  <script type="module" src="./phonebooth.js?v=6"></script>
 </body>
 </html>
