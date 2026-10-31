@@ -11,28 +11,33 @@
   <link rel="preload" as="image" href="../img/floral-bottom.webp" type="image/webp">
   <link rel="preload" as="image" href="../img/name-omar.webp" type="image/webp">
   <link rel="preload" as="image" href="../img/name-ola.webp" type="image/webp">
+  <link rel="preload" as="image" href="../img/name-wa.webp" type="image/webp">
+  <link rel="preload" as="image" href="../img/monogram.webp" type="image/webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./phonebooth.css?v=3">
+  <link rel="stylesheet" href="./phonebooth.css?v=4">
 </head>
 <body>
   <main class="page">
-    <section class="card" aria-labelledby="title">
-      <img class="floral floral-tr" src="../img/floral-top.webp" alt="" aria-hidden="true">
+    <section class="card paper-frame" aria-labelledby="title">
       <img class="floral floral-tl" src="../img/floral-top.webp" alt="" aria-hidden="true">
-      <img class="floral floral-br" src="../img/floral-bottom.webp" alt="" aria-hidden="true">
+      <img class="floral floral-tr" src="../img/floral-top.webp" alt="" aria-hidden="true">
       <img class="floral floral-bl" src="../img/floral-bottom.webp" alt="" aria-hidden="true">
+      <img class="floral floral-br" src="../img/floral-bottom.webp" alt="" aria-hidden="true">
       <div class="content">
-        <p class="basmala">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
-        <img class="monogram" src="../img/monogram.webp" alt="عمر وعلا">
-        <div class="names-art" aria-label="عمر وعلا">
-          <img src="../img/name-omar.webp" alt="عمر">
-          <span class="name-diamond" aria-hidden="true"></span>
-          <img src="../img/name-ola.webp" alt="علا">
-        </div>
-        <div class="fine-rule" aria-hidden="true"><i></i></div>
-        <p class="eyebrow">٢٦ · ١٢ · ٢٠٢٦</p>
+        <header class="invitation-mark">
+          <p class="basmala">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
+          <img class="monogram" src="../img/monogram.webp" alt="شعار عمر وعلا">
+          <div class="names-art" aria-label="عمر وعلا">
+            <img class="name-art" src="../img/name-omar.webp" alt="عمر">
+            <img class="wa-art" src="../img/name-wa.webp" alt="و">
+            <img class="name-art" src="../img/name-ola.webp" alt="علا">
+          </div>
+          <div class="fine-rule" aria-hidden="true"><i></i></div>
+          <p class="eyebrow">٢٦ · ١٢ · ٢٠٢٦</p>
+        </header>
+
         <h1 id="title">صندوق الذكريات</h1>
         <p class="intro">اتركوا لنا شيئًا جميلًا نتذكّر به هذا اليوم دائمًا.</p>
 
@@ -51,10 +56,10 @@
         <section class="panel" id="photoPanel" hidden><button class="back" type="button">العودة ←</button><h2>شاركنا صورة</h2><p class="prompt">سيلفي، لحظة من الحفل، أو صورتك المفضلة من يومنا.</p><label class="upload">اختيار أو التقاط صورة<input id="photoInput" type="file" accept="image/*" capture="environment"></label><img id="photoPreview" alt="معاينة الصورة المختارة" hidden><textarea id="photoCaption" maxlength="300" rows="3" placeholder="اكتب تعليقًا على الصورة (اختياري)"></textarea><button id="sendPhoto" class="primary" type="button" disabled>إرسال الصورة</button></section>
         <section class="panel success" id="successPanel" hidden><div class="heart">♥</div><h2>شكرًا لكم</h2><p>تم حفظ ذكراكم لعمر وعلا بكل حب.</p><button id="anotherBtn" class="primary" type="button">اترك ذكرى أخرى</button></section>
         <p id="status" class="status" role="status" aria-live="polite"></p>
-        <footer>عمر وعلا · ٢٦ ديسمبر ٢٠٢٦</footer>
+        <footer><div class="footer-rule" aria-hidden="true"><i></i></div><span>عمر وعلا · ٢٦ ديسمبر ٢٠٢٦</span></footer>
       </div>
     </section>
   </main>
-  <script type="module" src="./phonebooth.js?v=3"></script>
+  <script type="module" src="./phonebooth.js?v=4"></script>
 </body>
 </html>
