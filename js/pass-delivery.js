@@ -15,7 +15,20 @@
     });
 
     const open = $('open-pass-image');
-    if (open) open.textContent = 'عرض البطاقة كصورة';
+    if (open) {
+      open.textContent = 'عرض البطاقة كصورة';
+      open.style.width = 'min(100%, 230px)';
+      open.style.marginInline = 'auto';
+      open.style.gridColumn = '1 / -1';
+      open.style.justifySelf = 'center';
+      const actions = open.closest('.pass-actions');
+      if (actions) {
+        actions.style.gridTemplateColumns = '1fr';
+        actions.style.width = '100%';
+        actions.style.justifyItems = 'center';
+        actions.style.marginInline = 'auto';
+      }
+    }
 
     const note = $('pass-preview-note');
     if (note) note.textContent = 'لحفظ البطاقة، اضغط مطولًا على الصورة ثم اختر «حفظ الصورة». وإذا لم يظهر خيار الحفظ في متصفحك، يمكنك أخذ لقطة شاشة (Screenshot).';
