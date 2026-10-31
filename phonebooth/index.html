@@ -1,80 +1,87 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f7f3eb">
+  <meta name="theme-color" content="#F7F3EB">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <title>Ola & Omar · Phonebooth</title>
-  <meta name="description" content="Leave Ola & Omar a voice message, note, or photo from their wedding day.">
+  <title>عمر وعلا · صندوق الذكريات</title>
+  <meta name="description" content="اتركوا لعمر وعلا ذكرى صوتية أو رسالة أو صورة من يوم زفافهما.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./phonebooth.css?v=1">
+  <link rel="stylesheet" href="./phonebooth.css?v=2">
 </head>
 <body>
   <main class="page">
     <section class="card" aria-labelledby="title">
-      <div class="ornament" aria-hidden="true">✦</div>
-      <p class="eyebrow">26 · 12 · 2026</p>
-      <h1 id="title">The Ola & Omar<br><span>Phonebooth</span></h1>
-      <p class="intro">Leave us something to remember this day by.</p>
+      <img class="floral floral-tr" src="../img/floral-top.webp" alt="" aria-hidden="true">
+      <img class="floral floral-tl" src="../img/floral-top.webp" alt="" aria-hidden="true">
+      <img class="floral floral-br" src="../img/floral-bottom.webp" alt="" aria-hidden="true">
+      <img class="floral floral-bl" src="../img/floral-bottom.webp" alt="" aria-hidden="true">
+      <div class="content">
+        <img class="monogram" src="../img/monogram.webp" alt="عمر وعلا">
+        <p class="eyebrow">٢٦ · ١٢ · ٢٠٢٦</p>
+        <h1 id="title">صندوق ذكريات<br><span>عمر وعلا</span></h1>
+        <div class="fine-rule" aria-hidden="true"><i></i></div>
+        <p class="intro">اتركوا لنا شيئًا جميلًا نتذكّر به هذا اليوم دائمًا.</p>
 
-      <label class="name-field">Your name <span>(optional)</span>
-        <input id="guestName" maxlength="80" autocomplete="name" placeholder="Who is this from?">
-      </label>
-
-      <div class="choices" id="choices">
-        <button class="choice" data-panel="voicePanel"><b>🎙️</b><span>Record a voice message<small>Tell us a story, wish, or secret</small></span></button>
-        <button class="choice" data-panel="textPanel"><b>💌</b><span>Write us a message<small>A note for our future selves</small></span></button>
-        <button class="choice" data-panel="photoPanel"><b>📸</b><span>Share a photo<small>Take one now or choose one</small></span></button>
-      </div>
-
-      <section class="panel" id="voicePanel" hidden>
-        <button class="back" type="button">← Back</button>
-        <h2>Leave us your voice</h2>
-        <p class="prompt">What should we remember about tonight? Or give us one piece of marriage advice.</p>
-        <div class="recorder">
-          <div id="timer">00:00</div>
-          <button id="recordBtn" class="primary" type="button">Start recording</button>
-          <button id="stopBtn" type="button" hidden>Stop</button>
-          <audio id="previewAudio" controls hidden></audio>
-          <button id="sendVoice" class="primary" type="button" hidden>Send voice message</button>
-          <button id="redoVoice" type="button" hidden>Record again</button>
-        </div>
-      </section>
-
-      <section class="panel" id="textPanel" hidden>
-        <button class="back" type="button">← Back</button>
-        <h2>Write us a message</h2>
-        <p class="prompt">A memory, a wish, advice, or something that will make us laugh years from now.</p>
-        <textarea id="messageText" maxlength="2000" rows="7" placeholder="Dear Ola & Omar…"></textarea>
-        <button id="sendText" class="primary" type="button">Send message</button>
-      </section>
-
-      <section class="panel" id="photoPanel" hidden>
-        <button class="back" type="button">← Back</button>
-        <h2>Share a photo</h2>
-        <p class="prompt">A selfie, a dance-floor moment, or your favourite photo from today.</p>
-        <label class="upload">Choose or take a photo
-          <input id="photoInput" type="file" accept="image/*" capture="environment">
+        <label class="name-field">اسمك <span>(اختياري)</span>
+          <input id="guestName" maxlength="80" autocomplete="name" placeholder="مِن مَن هذه الذكرى؟">
         </label>
-        <img id="photoPreview" alt="Selected photo preview" hidden>
-        <textarea id="photoCaption" maxlength="300" rows="3" placeholder="Add a caption (optional)"></textarea>
-        <button id="sendPhoto" class="primary" type="button" disabled>Send photo</button>
-      </section>
 
-      <section class="panel success" id="successPanel" hidden>
-        <div class="heart">♥</div>
-        <h2>Thank you</h2>
-        <p>Your memory has been saved for Ola & Omar.</p>
-        <button id="anotherBtn" class="primary" type="button">Leave another memory</button>
-      </section>
+        <div class="choices" id="choices">
+          <button class="choice" data-panel="voicePanel"><b>🎙️</b><span>سجّل رسالة صوتية<small>احكِ لنا قصة، أمنية، أو كلمة من القلب</small></span></button>
+          <button class="choice" data-panel="textPanel"><b>💌</b><span>اكتب لنا رسالة<small>رسالة نعود إليها في السنوات القادمة</small></span></button>
+          <button class="choice" data-panel="photoPanel"><b>📸</b><span>شاركنا صورة<small>التقط صورة الآن أو اختر واحدة من هاتفك</small></span></button>
+        </div>
 
-      <p id="status" class="status" role="status" aria-live="polite"></p>
-      <footer>Ola & Omar · 26 December 2026</footer>
+        <section class="panel" id="voicePanel" hidden>
+          <button class="back" type="button">العودة ←</button>
+          <h2>اترك لنا صوتك</h2>
+          <p class="prompt">ما الذي تريد أن نتذكّره عن هذه الليلة؟ أو شاركنا نصيحة جميلة للحياة الزوجية.</p>
+          <div class="recorder">
+            <div id="timer">00:00</div>
+            <button id="recordBtn" class="primary" type="button">ابدأ التسجيل</button>
+            <button id="stopBtn" type="button" hidden>إيقاف التسجيل</button>
+            <audio id="previewAudio" controls hidden></audio>
+            <button id="sendVoice" class="primary" type="button" hidden>إرسال الرسالة الصوتية</button>
+            <button id="redoVoice" type="button" hidden>تسجيل مرة أخرى</button>
+          </div>
+        </section>
+
+        <section class="panel" id="textPanel" hidden>
+          <button class="back" type="button">العودة ←</button>
+          <h2>اكتب لنا رسالة</h2>
+          <p class="prompt">ذكرى، أمنية، نصيحة، أو كلمة تجعلنا نبتسم عندما نقرأها بعد سنوات.</p>
+          <textarea id="messageText" maxlength="2000" rows="7" placeholder="إلى عمر وعلا…"></textarea>
+          <button id="sendText" class="primary" type="button">إرسال الرسالة</button>
+        </section>
+
+        <section class="panel" id="photoPanel" hidden>
+          <button class="back" type="button">العودة ←</button>
+          <h2>شاركنا صورة</h2>
+          <p class="prompt">سيلفي، لحظة من الحفل، أو صورتك المفضلة من يومنا.</p>
+          <label class="upload">اختيار أو التقاط صورة
+            <input id="photoInput" type="file" accept="image/*" capture="environment">
+          </label>
+          <img id="photoPreview" alt="معاينة الصورة المختارة" hidden>
+          <textarea id="photoCaption" maxlength="300" rows="3" placeholder="اكتب تعليقًا على الصورة (اختياري)"></textarea>
+          <button id="sendPhoto" class="primary" type="button" disabled>إرسال الصورة</button>
+        </section>
+
+        <section class="panel success" id="successPanel" hidden>
+          <div class="heart">♥</div>
+          <h2>شكرًا لكم</h2>
+          <p>تم حفظ ذكراكم لعمر وعلا بكل حب.</p>
+          <button id="anotherBtn" class="primary" type="button">اترك ذكرى أخرى</button>
+        </section>
+
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <footer>عمر وعلا · ٢٦ ديسمبر ٢٠٢٦</footer>
+      </div>
     </section>
   </main>
-  <script type="module" src="./phonebooth.js?v=1"></script>
+  <script type="module" src="./phonebooth.js?v=2"></script>
 </body>
 </html>
