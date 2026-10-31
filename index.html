@@ -23,6 +23,9 @@
         if(!html.includes('js/polish.js')){
           html=html.replace('</head>','  <script defer src="js/polish.js?v=1.0.2"></scr'+'ipt>\n</head>');
         }
+        if(!html.includes('js/pass-delivery.js')){
+          html=html.replace('</body>','  <script defer src="js/pass-delivery.js?v=1.0.0"></scr'+'ipt>\n</body>');
+        }
         document.open();
         document.write(html);
         document.close();
