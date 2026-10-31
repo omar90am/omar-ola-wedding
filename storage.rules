@@ -2,21 +2,14 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     function signedIn() { return request.auth != null; }
-    function validId(id) { return id.matches('^[A-Za-z0-9_-]{20,80}$'); }
-
-    match /phonebooth/{kind}/{id}/{fileName} {
-      allow read: if signedIn();
-      allow create: if validId(id)
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    match /phonebooth/{uid}/{kind}/{fileName} {
+      allow create: if isOwner(uid)
         && (kind == 'voice' || kind == 'photo')
-        && request.resource.size < (kind == 'voice' ? 15728640 : 10485760)
-        && (kind == 'voice'
-          ? request.resource.contentType.matches('audio/.*')
-          : request.resource.contentType.matches('image/.*'));
-      allow update, delete: if signedIn();
+        && request.resource.size <= (kind == 'voice' ? 12582912 : 8388608)
+        && (kind == 'voice' ? request.resource.contentType.matches('audio/.*') : request.resource.contentType.matches('image/.*'));
+      allow read, update, delete: if isOwner(uid);
     }
-
-    match /{allPaths=**} {
-      allow read, write: if false;
-    }
+    match /{allPaths=**} { allow read, write: if false; }
   }
 }
