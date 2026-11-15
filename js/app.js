@@ -10,7 +10,7 @@
     appId: '1:329727762097:web:e7ced21cda37f64548cc90'
   };
 
-  const EVENT_AT = new Date('2026-12-26T19:00:00+03:00').getTime();
+  const EVENT_AT = new Date('2026-12-26T17:00:00+03:00').getTime();
   const MUSIC_VOLUME = 0.28;
   const COUNTRY_LIST = [
     ['IQ','964'],['DE','49'],['GB','44'],['FR','33'],['NL','31'],['SE','46'],['CH','41'],['AT','43'],['DK','45'],['NO','47'],
