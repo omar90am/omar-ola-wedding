@@ -440,6 +440,84 @@
     }
   </style>
 
+  <style id="timeline-refinement-v1">
+    /* Separate Arabic titles from 12-hour times, with a consistent rhythm on every screen. */
+    .timeline{width:min(100%,680px);margin:24px auto 0}
+    .timeline li{
+      display:grid;
+      grid-template-columns:124px minmax(0,1fr);
+      align-items:center;
+      column-gap:clamp(18px,3vw,28px);
+      min-height:78px;
+      padding:12px;
+      border-bottom:1px solid var(--gold-soft);
+    }
+    .timeline li:last-child{border-bottom:0}
+    .timeline time{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      justify-self:stretch;
+      min-width:0;
+      min-height:48px;
+      padding:0 0 0 13px;
+      margin:0;
+      border-left:1px solid var(--gold-soft);
+      direction:rtl;
+      unicode-bidi:normal;
+      white-space:normal;
+      text-align:center;
+      letter-spacing:0;
+      color:var(--gold);
+    }
+    .timeline-clock{
+      display:block;
+      font-family:'Tajawal',sans-serif;
+      font-size:1.22rem;
+      font-weight:700;
+      line-height:1.1;
+      letter-spacing:.015em;
+      font-variant-numeric:tabular-nums;
+      direction:ltr;
+      unicode-bidi:isolate;
+    }
+    .timeline-period{
+      display:block;
+      margin-top:3px;
+      font-family:'Amiri',serif;
+      font-size:.82rem;
+      font-weight:400;
+      line-height:1.2;
+      color:var(--muted);
+    }
+    .timeline strong{
+      display:block;
+      min-width:0;
+      text-align:right;
+      font-family:'Amiri',serif;
+      font-size:clamp(1.12rem,2.4vw,1.3rem);
+      font-weight:700;
+      line-height:1.5;
+      color:var(--brown);
+      overflow-wrap:break-word;
+    }
+    @media(max-width:760px){
+      .timeline{margin-top:17px}
+      .timeline li{grid-template-columns:94px minmax(0,1fr);column-gap:14px;min-height:71px;padding:10px 3px}
+      .timeline time{min-height:45px;padding-left:10px}
+      .timeline-clock{font-size:1.12rem}
+      .timeline-period{font-size:.78rem}
+      .timeline strong{font-size:1.08rem;line-height:1.45}
+    }
+    @media(max-width:360px){
+      .timeline li{grid-template-columns:78px minmax(0,1fr);column-gap:10px;min-height:68px;padding:9px 0}
+      .timeline time{padding-left:8px}
+      .timeline-clock{font-size:1.04rem}
+      .timeline strong{font-size:1.02rem}
+    }
+  </style>
+
   <script defer src="js/qrcode-local.js?v=1.0.0"></script>
   <script defer src="js/app.js?v=1.0.0"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -524,7 +602,7 @@
       <div class="event-summary"><div><span>التاريخ</span><strong>السبت، 26 ديسمبر 2026</strong></div><div><span>المكان</span><strong>قاعة أوريف</strong><small>عنكاوا، أربيل</small></div><div><span>استقبال الضيوف</span><strong dir="rtl">5:00 مساءً</strong></div></div>
       <button class="map-button" id="open-location-modal" type="button"><span>الانتقال إلى موقع القاعة على الخريطة</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6-5.3 6-12a6 6 0 1 0-12 0c0 6.7 6 12 6 12Zm0-9a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg></button>
       <div class="hosting-notes"><p>حرصًا على أناقة الأمسية وراحة الجميع، ستكون الدعوة بكل محبة <strong>مخصصة للبالغين</strong>.</p><p>نرجو التكرم بتأكيد عدد الحضور بدقة، إذ تُعتمد بطاقات الدخول وفق العدد المسجّل في الرد.</p></div>
-      <ol class="timeline"><li><time datetime="17:00">5:00 مساءً</time><strong>استقبال الضيوف</strong></li><li><time datetime="18:00">6:00 مساءً</time><strong>الزفّة ودخول العروسين</strong></li><li><time datetime="19:30">7:30 مساءً</time><strong>الرقصة الأولى</strong></li><li><time datetime="20:30">8:30 مساءً</time><strong>كعكة الزفاف</strong></li><li><time datetime="21:00">9:00 مساءً</time><strong>العشاء</strong></li><li><time datetime="22:30">10:30 مساءً</time><strong>الرقصة الثانية</strong></li></ol>
+      <ol class="timeline"><li><time datetime="17:00"><span class="timeline-clock">5:00</span><span class="timeline-period">مساءً</span></time><strong>استقبال الضيوف</strong></li><li><time datetime="18:00"><span class="timeline-clock">6:00</span><span class="timeline-period">مساءً</span></time><strong>الزفّة ودخول العروسين</strong></li><li><time datetime="19:30"><span class="timeline-clock">7:30</span><span class="timeline-period">مساءً</span></time><strong>الرقصة الأولى</strong></li><li><time datetime="20:30"><span class="timeline-clock">8:30</span><span class="timeline-period">مساءً</span></time><strong>كعكة الزفاف</strong></li><li><time datetime="21:00"><span class="timeline-clock">9:00</span><span class="timeline-period">مساءً</span></time><strong>العشاء</strong></li><li><time datetime="22:30"><span class="timeline-clock">10:30</span><span class="timeline-period">مساءً</span></time><strong>الرقصة الثانية</strong></li></ol>
     </section>
 
     <section class="rsvp reveal" id="form-card" aria-labelledby="rsvp-title">
